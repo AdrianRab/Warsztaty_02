@@ -1,0 +1,22 @@
+package szkolaprogramowania;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+
+public class Connect {
+	Connection conn = null;
+	public Connect() {
+	String db_name = "fill me";
+	String user_name = "fill me";
+	String password = "fille me "
+		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_name?useSSL=false",user_name,password)){
+		}
+		catch(SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	public Connection getConnection() {
+		return conn;
+	}
+};

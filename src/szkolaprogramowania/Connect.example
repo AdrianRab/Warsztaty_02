@@ -9,7 +9,7 @@ public class Connect {
 	public Connect() {
 	String db_name = "fill me";
 	String user_name = "fill me";
-	String password = "fille me "
+	String password = "fill me "
 		try (Connection conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_name?useSSL=false",user_name,password)){
 		}
 		catch(SQLException e) {

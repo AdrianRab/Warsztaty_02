@@ -4,20 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Exercise {
 	private int id;
 	private String title;
 	private String description;
-	
-	
+
+
 	public Exercise(String title, String description) {
 		this.title = title;
 		this.description = description;
 	}
-	
+
 	public Exercise() {}
-	
+
 	public int getId() {
 		return id;
 	}
@@ -33,8 +34,8 @@ public class Exercise {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	
-	
+
+
 	public static void createTable(Connection conn) {
 		String query = "CREATE TABLE exercises(\n" + 
 				"	id INT AUTO_INCREMENT,\n" + 
@@ -49,13 +50,12 @@ public class Exercise {
 			System.out.println("Nie mozna utworzyć tabeli exercises");
 		}
 	}
-	
+
 	public void	saveToDB(Connection	conn) throws SQLException	{
 		if (this.id == 0)	{
 			String sql = "INSERT INTO exercises(title,description ) VALUES (?,?)";
 			String generatedColumns[] = { "ID" };
-			PreparedStatement preparedStatement;
-			preparedStatement = conn.prepareStatement(sql, generatedColumns);
+			PreparedStatement preparedStatement = conn.prepareStatement(sql, generatedColumns);
 			preparedStatement.setString(1,	this.title);
 			preparedStatement.setString(2,	this.description);
 			preparedStatement.executeUpdate();
@@ -63,9 +63,8 @@ public class Exercise {
 			if (rs.next()) { 
 				this.id	= rs.getInt(1);
 			}else	{
-				String	sql1 =	"UPDATE	groups SET title=?, description=? WHERE	id=?";
-				PreparedStatement	preparedStatement1;
-				preparedStatement1	= conn.prepareStatement(sql1);
+				String	sql1 =	"UPDATE	exercises SET title=?, description=? WHERE	id=?";
+				PreparedStatement	preparedStatement1 = conn.prepareStatement(sql1);
 				preparedStatement1.setString(1, this.title);
 				preparedStatement1.setString(2, this.description);
 				preparedStatement1.setInt(3, this.id);
@@ -73,5 +72,50 @@ public class Exercise {
 			}
 		}
 	}
+
+	static	public	Exercise loadById(Connection conn, int id) throws SQLException {
+		String	sql	= "SELECT *	FROM exercises	WHERE id=?";
+		PreparedStatement preparedStatement =	conn.prepareStatement(sql);
+		preparedStatement.setInt(1,	id);
+		ResultSet resultSet	= preparedStatement.executeQuery();
+		if	(resultSet.next()) {
+			Exercise loadedExercise = new Exercise();
+			loadedExercise.id = resultSet.getInt("id");
+			loadedExercise.title	= resultSet.getString("title");
+			loadedExercise.description = resultSet.getString("description");
+			return	loadedExercise;
+		}
+		return	null;
+	}
+
+	static	public	Exercise[] loadAll(Connection conn) throws	SQLException	{
+		ArrayList<Exercise> exercises = new ArrayList<Exercise>();
+		String	sql	="SELECT* FROM exercises";	
+		PreparedStatement preparedStatement =	conn.prepareStatement(sql);
+		ResultSet resultSet	= preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			Exercise loadedExercise = new Exercise();
+			loadedExercise.id = resultSet.getInt("id");
+			loadedExercise.title	= resultSet.getString("title");
+			loadedExercise.description	= resultSet.getString("description");
+			exercises.add(loadedExercise);}
+		Exercise[]	eArray	= new Exercise[exercises.size()];
+		eArray = exercises.toArray(eArray);
+		return	eArray;
+	}
 	
+	public void delete(Connection conn) throws SQLException {
+		if (this.id != 0) {
+			String sql = "DELETE FROM exercises	WHERE id= ?";
+			PreparedStatement preparedStatement = conn.prepareStatement(sql);
+			preparedStatement.setInt(1, this.id);
+			preparedStatement.executeUpdate();
+			this.id = 0;
+		}
+	}
+	
+	public String toString() {
+		return this.id+" "+this.title + " " + this.description;
+	}
+
 }

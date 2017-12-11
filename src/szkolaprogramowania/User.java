@@ -90,8 +90,7 @@ public class User {
 				this.id	= rs.getInt(1);
 			}else	{
 				String	sql1 =	"UPDATE	users SET username=?, email=?, password=?, group_id=? WHERE	id	=?";
-				PreparedStatement	preparedStatement1;
-				preparedStatement1	= conn.prepareStatement(sql1);
+				PreparedStatement	preparedStatement1 = conn.prepareStatement(sql1);
 				preparedStatement1.setString(1,this.username);
 				preparedStatement1.setString(2,this.email);
 				preparedStatement1.setString(3,this.password);
@@ -104,8 +103,7 @@ public class User {
 
 	static	public	User loadUserById(Connection conn, int id) throws SQLException {
 		String	sql	= "SELECT *	FROM users	WHERE id=?";
-		PreparedStatement preparedStatement;
-		preparedStatement =	conn.prepareStatement(sql);
+		PreparedStatement preparedStatement =	conn.prepareStatement(sql);
 		preparedStatement.setInt(1,	id);
 		ResultSet resultSet	= preparedStatement.executeQuery();
 		if	(resultSet.next()) {
@@ -135,7 +133,8 @@ public class User {
 			users.add(loadedUser);}
 		User[]	uArray	= new User[users.size()];
 		uArray = users.toArray(uArray);
-		return	uArray;}
+		return	uArray;
+		}
 
 	public void delete(Connection conn) throws SQLException {
 		if (this.id != 0) {

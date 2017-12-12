@@ -15,7 +15,7 @@ public class Solution {
 	private String description;
 	private Exercise exercise_id;
 	private User user_id;
-	
+
 	public Solution(Date created, Date updated, String description, Exercise exercise_id, User user_id) {
 		this.created = created;
 		this.updated = updated;
@@ -23,10 +23,10 @@ public class Solution {
 		this.exercise_id = exercise_id;
 		this.user_id = user_id;
 	}
-	
+
 	public Solution() {}
-	
-	
+
+
 	public int getId() {
 		return id;
 	}
@@ -68,7 +68,7 @@ public class Solution {
 				"    updated DATETIME,\n" + 
 				"    description TEXT,	\n" + 
 				"    exercises_id INT NOT NULL,\n" + 
-				"    users_id BIGINT, \n" + 
+				"    users_id BIGINT NOT NULL, \n" + 
 				"    PRIMARY KEY (id),\n" + 
 				"    FOREIGN KEY(exercises_id) REFERENCES exercises(id),\n" + 
 				"    FOREIGN KEY(users_id) REFERENCES users(id)\n" + 
@@ -80,8 +80,8 @@ public class Solution {
 			System.out.println("Nie mozna utworzyć tabeli exercises");
 		}
 	}
-	
-	
+
+
 	public void	saveToDB(Connection	conn) throws SQLException	{
 		if (this.id == 0)	{
 			String sql = "INSERT INTO solutions(created,updated, description, exercises_id, users_id) VALUES (?,?,?,?,?)";
@@ -96,19 +96,20 @@ public class Solution {
 			ResultSet rs  = preparedStatement.getGeneratedKeys();
 			if (rs.next()) { 
 				this.id	= rs.getInt(1);
-			}else	{
-				String	sql1 =	"UPDATE	solutions SET created=?, updated=?, description=?, exercises_id= ?, users_id=? WHERE	id=?";
-				PreparedStatement	preparedStatement1 = conn.prepareStatement(sql1, generatedColumns);
-				preparedStatement1.setDate(1, this.created);
-				preparedStatement1.setDate(2, this.updated);
-				preparedStatement1.setString(3,	this.description);
-				preparedStatement1.setInt(4, this.exercise_id.getId());
-				preparedStatement1.setInt(5, this.user_id.getId());
-				preparedStatement1.setInt(6, this.id);
-				preparedStatement1.executeUpdate();
 			}
+		}else {
+			String	sql =	"UPDATE	solutions SET created=?, updated=?, description=?, exercises_id= ?, users_id=? WHERE id=?";
+			PreparedStatement	preparedStatement1 = conn.prepareStatement(sql);
+			preparedStatement1.setDate(1, this.created);
+			preparedStatement1.setDate(2, this.updated);
+			preparedStatement1.setString(3,	this.description);
+			preparedStatement1.setInt(4, this.exercise_id.getId());
+			preparedStatement1.setInt(5, this.user_id.getId());
+			preparedStatement1.setInt(6, this.id);
+			preparedStatement1.executeUpdate();
 		}
 	}
+
 
 	static	public	Solution loadById(Connection conn, int id) throws SQLException {
 		String	sql	= "SELECT *	FROM solutions	WHERE id=?";
@@ -146,7 +147,7 @@ public class Solution {
 		sArray = solutions.toArray(sArray);
 		return	sArray;
 	}
-	
+
 	public void delete(Connection conn) throws SQLException {
 		if (this.id != 0) {
 			String sql = "DELETE FROM solutions	WHERE id= ?";
@@ -156,9 +157,9 @@ public class Solution {
 			this.id = 0;
 		}
 	}
-	
+
 	public String toString() {
 		return this.id+" "+this.created + " " + this.updated + " "+ this.description + " "+ this.exercise_id +  " "+ this.user_id;
 	}
-	
+
 }

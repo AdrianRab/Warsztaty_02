@@ -10,7 +10,7 @@ public class Group {
 
 	private int id;
 	private String name;
-	
+
 
 	public Group(String name) {
 		this.name = name;
@@ -55,16 +55,17 @@ public class Group {
 			ResultSet rs  = preparedStatement.getGeneratedKeys();
 			if (rs.next()) { 
 				this.id	= rs.getInt(1);
-			}else	{
-				String	sql1 =	"UPDATE	groups SET name=? WHERE	id=?";
-				PreparedStatement	preparedStatement1;
-				preparedStatement1	= conn.prepareStatement(sql1);
-				preparedStatement.setString(1, this.name); //dodalem sam
-				preparedStatement1.setInt(2, this.id);
-				preparedStatement1.executeUpdate();
 			}
+		}else	{
+			String	sql =	"UPDATE	groups SET name=? WHERE	id=?";
+			PreparedStatement	preparedStatement1;
+			preparedStatement1	= conn.prepareStatement(sql);
+			preparedStatement1.setString(1, this.name); //dodalem sam
+			preparedStatement1.setInt(2, this.id);
+			preparedStatement1.executeUpdate();
 		}
 	}
+
 
 	static	public	Group loadById(Connection conn, int id) throws SQLException {
 		String	sql	= "SELECT *	FROM groups	WHERE id=?";
@@ -79,7 +80,7 @@ public class Group {
 			return	loadedGroup;
 		}
 		return	null;}
-	
+
 	static	public	Group[] loadAll(Connection conn) throws	SQLException	{
 		ArrayList<Group> groups = new ArrayList<Group>();
 		String	sql	="SELECT* FROM groups";	
@@ -94,7 +95,7 @@ public class Group {
 		Group[]	gArray	= new Group[groups.size()];
 		gArray = groups.toArray(gArray);
 		return	gArray;}
-	
+
 	public void delete(Connection conn) throws SQLException {
 		if (this.id != 0) {
 			String sql = "DELETE	FROM	groups	WHERE	id=	?";
@@ -105,7 +106,7 @@ public class Group {
 			this.id = 0;
 		}
 	}
-	
+
 	public String toString() {
 		return this.id + " " + this.name;
 	}

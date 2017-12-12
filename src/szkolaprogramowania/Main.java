@@ -63,26 +63,48 @@ public class Main {
 			
 			Date created = new Date(0);
 			Date updated = new Date(0);
+			Date createdaft = new Date(0);
+			Date updatedaft = new Date(0);
 			DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
 			try {
 				 created = new Date(df.parse("12-10-2017").getTime());
 				 updated = new Date(df.parse("12-11-2017").getTime());
+				 createdaft = new Date(df.parse("10-12-2017").getTime());
+				 updatedaft = new Date(df.parse("10-12-2017").getTime());
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
 			
-			User user = User.loadUserById(conn, 1);
-			Exercise zadanie1 =  Exercise.loadById(conn, 1);
-			Solution sol = new Solution();
-			sol.setCreated(created);
-			sol.setUpdated(updated);
-			sol.setDescription("Test description");
-			sol.setUser_id(user);
-			sol.setExercise_id(zadanie1);
+//			User user = User.loadUserById(conn, 3);
+//			Exercise zadanie1 =  Exercise.loadById(conn, 1);
+//			Solution sol = new Solution();
+//			sol.setCreated(created);
+//			sol.setUpdated(updated);
+//			sol.setDescription("Zadanie 1, Stworzyłem szyfr Cezara");
+//			sol.setUser_id(user);
+//			sol.setExercise_id(zadanie1);
+//			
+//			sol.saveToDB(conn);
+//			
+//			System.out.println(sol.loadById(conn, 1));
+//			User user = User.loadUserById(conn, 2);
+//			user.setEmail("marcjano@wp.pl");
+//			user.saveToDB(conn);
+			Exercise task = new Exercise();
+			System.out.println(task.loadAllByUserId(conn, 2));
 			
-			sol.saveToDB(conn);
+			Solution sol2 = Solution.loadById(conn, 2);
+			sol2.setDescription("Zadanie 2. Goul concured");
+			sol2.setCreated(createdaft);
+			sol2.setUpdated(updatedaft);
+			sol2.saveToDB(conn);
 			
-			System.out.println(sol.loadById(conn, 1));
+			System.out.println("ID " +sol2.getId());
+			System.out.println("New description: " + sol2.getDescription());
+			System.out.println("created "+ sol2.getCreated());
+			System.out.println("updated "+ sol2.getUpdated());
+			System.out.println("user id " + sol2.getUser_id());
+			System.out.println("ecercise id " + sol2.getExercise_id());
 //			user.saveToDB(conn);
 //			user2.saveToDB(conn);
 //			user3.saveToDB(conn);
@@ -103,15 +125,15 @@ public class Main {
 //			user.setEmail("adi@poczta.pl");
 //			user.saveToDB(conn);
 //			
-			System.out.println(user.getId() + " "+user.getUsername()+ " "+ user.getEmail() + " "+ user.getGroup());
-			System.out.println(user2.getId() + " "+user2.getUsername()+ " "+ user2.getEmail() + " "+ user2.getGroup());
-			System.out.println(user3.getId() + " "+user3.getUsername()+ " "+ user3.getEmail() + " "+ user3.getGroup());
-			System.out.println(user4.getId() + " "+user4.getUsername()+ " "+ user4.getEmail() + " "+ user4.getGroup());
-			System.out.println(cezar.getId()+" "+cezar.getUsername()+ " "+ cezar.getEmail() + " "+ cezar.getGroup());
-			
-			System.out.println(cezar.loadUserById(conn, 1));
-			System.out.println(user.loadUserById(conn, 2));
-			System.out.println(user2.loadUserById(conn, 3));
+//			System.out.println(user.getId() + " "+user.getUsername()+ " "+ user.getEmail() + " "+ user.getGroup());
+//			System.out.println(user2.getId() + " "+user2.getUsername()+ " "+ user2.getEmail() + " "+ user2.getGroup());
+//			System.out.println(user3.getId() + " "+user3.getUsername()+ " "+ user3.getEmail() + " "+ user3.getGroup());
+//			System.out.println(user4.getId() + " "+user4.getUsername()+ " "+ user4.getEmail() + " "+ user4.getGroup());
+//			System.out.println(cezar.getId()+" "+cezar.getUsername()+ " "+ cezar.getEmail() + " "+ cezar.getGroup());
+//			
+//			System.out.println(cezar.loadUserById(conn, 1));
+//			System.out.println(user.loadUserById(conn, 2));
+//			System.out.println(user2.loadUserById(conn, 3));
 			//System.out.println(user3.loadUserById(conn, 4));
 			//System.out.println(user4.loadUserById(conn, 5));
 			System.out.println((group.loadById(conn, 2)));

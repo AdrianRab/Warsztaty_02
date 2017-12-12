@@ -88,18 +88,19 @@ public class User {
 			ResultSet rs  = preparedStatement.getGeneratedKeys();
 			if (rs.next()) { 
 				this.id	= rs.getInt(1);
-			}else	{
-				String	sql1 =	"UPDATE	users SET username=?, email=?, password=?, group_id=? WHERE	id	=?";
-				PreparedStatement	preparedStatement1 = conn.prepareStatement(sql1);
+			}
+		}else{
+				String	sql =	"UPDATE	users SET username=?, email=?, password=?, group_id=? WHERE	id	=?";
+				PreparedStatement	preparedStatement1 = conn.prepareStatement(sql);
 				preparedStatement1.setString(1,this.username);
 				preparedStatement1.setString(2,this.email);
 				preparedStatement1.setString(3,this.password);
-				preparedStatement.setInt(4, this.group.getId());
+				preparedStatement1.setInt(4, this.group.getId());
 				preparedStatement1.setInt(5, this.id);
 				preparedStatement1.executeUpdate();
 			}
 		}
-	}
+	
 
 	static	public	User loadUserById(Connection conn, int id) throws SQLException {
 		String	sql	= "SELECT *	FROM users	WHERE id=?";

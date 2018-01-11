@@ -11,6 +11,21 @@ public class Main {
 
 	public static void main(String[] args) {
 		try (Connection conn = (new Connect()).getConnection()){
+			
+			Group grupa3 = new Group();
+			grupa3.setName("Grupa JavaScript");
+			grupa3.saveToDB(conn);
+			
+			User student1 = new User("Hamilkar Barkas", "killromans", "hamilkar.barkas@barkida.pu", grupa3);
+			User student2 = new User("Hannibal Barkas", "kannyrulezz", "hannibal.barkas@barkida.pu", grupa3);
+//			student1.saveToDB(conn);
+//			student2.saveToDB(conn);
+			Group newUserGroup = Group.loadById(conn, 3);
+			System.out.println(newUserGroup);
+			System.out.println("Student 1 name " + student1.getUsername() + " email " + student1.getEmail());
+			System.out.println("Student 2 name " + student2.getUsername() + " email " + student2.getEmail());
+			System.out.println(User.loadAllByGrupId(conn, grupa3.getId()).toString());
+			System.out.println(User.loadAllByGrupId(conn, 4).toString());
 //			Group.createTable(conn);
 //			User.createTable(conn);
 //			Exercise.createTable(conn);
@@ -69,8 +84,8 @@ public class Main {
 			try {
 				 created = new Date(df.parse("12-10-2017").getTime());
 				 updated = new Date(df.parse("12-11-2017").getTime());
-				 createdaft = new Date(df.parse("10-12-2017").getTime());
-				 updatedaft = new Date(df.parse("10-12-2017").getTime());
+				 createdaft = new Date(df.parse("10-01-2018").getTime());
+				 updatedaft = new Date(df.parse("12-11-2018").getTime());
 			} catch (ParseException e) {
 				e.printStackTrace();
 			}
@@ -94,7 +109,7 @@ public class Main {
 			System.out.println(task.loadAllByUserId(conn, 2));
 			
 			Solution sol2 = Solution.loadById(conn, 2);
-			sol2.setDescription("Zadanie 2. Goul concured");
+			sol2.setDescription("Zadanie 3, Rome humiliated");
 			sol2.setCreated(createdaft);
 			sol2.setUpdated(updatedaft);
 			sol2.saveToDB(conn);

@@ -147,9 +147,34 @@ public class User {
 			this.id = 0;
 		}
 	}
+	
+	static public User[] loadAllByGrupId (Connection conn, int id) throws SQLException {
+		ArrayList<User>	users = new	ArrayList<User>();
+		String sql = "SELECT * FROM users WHERE group_id =?";
+		PreparedStatement preparedStatement = conn.prepareStatement(sql);
+		preparedStatement.setInt(1, id);
+		ResultSet resultSet	= preparedStatement.executeQuery();
+		while (resultSet.next()) {
+			User loadedUser	= new User();
+			loadedUser.id = resultSet.getInt("id");
+			loadedUser.username	= resultSet.getString("username");
+			loadedUser.password	= resultSet.getString("password");
+			loadedUser.email = resultSet.getString("email");
+			loadedUser.group = Group.loadById(conn, resultSet.getInt("id"));
+			users.add(loadedUser);
+			}
+		User[]	uArray	= new User[users.size()];
+		uArray = users.toArray(uArray);
+		return	uArray;
+		}
 
+	@Override
 	public String toString() {
-		return this.id+" "+this.username + " " + this.email + " "+ this.group.getName();
+		return  id + " " + username + " " + password + " " + email + " " + group;
 	}
+
+//	public String toString() {
+//		return this.id+" "+this.username + " " + this.email + " "+ this.group.getName();
+//	}
 
 }

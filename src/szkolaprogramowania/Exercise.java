@@ -115,23 +115,26 @@ public class Exercise {
 		}
 	}
 
-	static public Exercise loadAllByUserId(Connection conn, int id) throws SQLException{ // dopisac wysietlanie rozwiazan
+	static public Exercise[] loadAllByUserId(Connection conn, int id) throws SQLException{ // dopisac wysietlanie rozwiazan
+		ArrayList<Exercise> exercises = new ArrayList<Exercise>();
 		String	sql	= "SELECT * FROM exercises JOIN solutions ON exercises.id = solutions.exercises_id WHERE solutions.users_id = ?";
 		PreparedStatement preparedStatement =	conn.prepareStatement(sql);
 		preparedStatement.setInt(1,	id);
 		ResultSet resultSet	= preparedStatement.executeQuery();
-		if	(resultSet.next()) {
+		while(resultSet.next()) {
 			Exercise loadedExercise = new Exercise();
 			loadedExercise.id = resultSet.getInt("id");
 			loadedExercise.title	= resultSet.getString("title");
 			loadedExercise.description = resultSet.getString("description");
-			return	loadedExercise;
+			exercises.add(loadedExercise);
 		}
-		return	null;
+		Exercise[]	eArray	= new Exercise[exercises.size()];
+		eArray = exercises.toArray(eArray);
+		return	eArray;
 	}
 	
 	public String toString() {
-		return this.id+" "+this.title + " " + this.description;
+		return id+" "+title + " \n" + description +"\n";
 	}
 
 }
